@@ -1,4 +1,5 @@
 import snowflake.connector as sf
+import pandas as pd
 from config import config
 
 # Connection String
@@ -25,3 +26,15 @@ try:
         print(line)
 except Exception as e:
     print(e)
+
+
+sql = """
+SELECT * FROM "MI_XPRESSCLOUD"."XPRESSFEED"."CIQEXCHANGERATE";
+""" 
+#cursor = conn.cursor()
+#cursor.execute(sql)
+#df = pd.cursor.fetch_pandas_all()
+df = pd.read_sql(sql, conn)
+print(df.head())
+# for line in df:
+#     print(line)
