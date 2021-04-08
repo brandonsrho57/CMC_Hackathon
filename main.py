@@ -1,5 +1,7 @@
 import snowflake.connector as sf
 from config import config
+import matplotlib.pyplot as plt
+import pandas as pd
 
 # Connection String
 conn = sf.connect(
@@ -13,6 +15,7 @@ def test_connection(connect, query):
     cursor.execute(query)
     cursor.close()
 
+'''
 try:
     sql = """
     SELECT * FROM "MI_XPRESSCLOUD"."XPRESSFEED"."SPGSCOREVALUE"
@@ -23,5 +26,16 @@ try:
     cursor.execute(sql)
     for line in cursor:
         print(line)
+except Exception as e:
+    print(e)
+'''
+
+try:
+    sql = """
+        SELECT * FROM "MI_XPRESSCLOUD"."XPRESSFEED"."CIQEXCHANGERATE"
+        LIMIT 5;
+        """
+    df = pd.read_sql(sql, conn)
+    print(df.head())
 except Exception as e:
     print(e)
