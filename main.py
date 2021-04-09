@@ -1,5 +1,6 @@
 import snowflake.connector as sf
 import pandas as pd
+import matplotlib as plt
 from config import config
 
 # Connection String
