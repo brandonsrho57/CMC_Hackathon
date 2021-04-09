@@ -56,28 +56,28 @@ SELECT * FROM "MI_XPRESSCLOUD"."XPRESSFEED"."SPGSCOREWEIGHT";
 """
 #cleaning spgscorevalue dataset
 df1 = pd.read_sql(sql1, conn)
-df1 = df1.dropna()
-df1 = df1.drop_duplicates()
+# df1 = df1.dropna()
+# df1 = df1.drop_duplicates()
 #cleaning samindustry dataset
 df2 = pd.read_sql(sql2, conn)
-df2 = df2.dropna()
-df2 = df2.drop_duplicates()
+# df2 = df2.dropna()
+# df2 = df2.drop_duplicates()
 #cleaning spgaspect dataset
 df3 = pd.read_sql(sql3, conn)
-df3 = df3.dropna()
-df3 = df3.drop_duplicates()
+# df3 = df3.dropna()
+# df3 = df3.drop_duplicates()
 #cleaning spgassessmenttype dataset
 df4 = pd.read_sql(sql4, conn)
-df4 = df4.dropna()
-df4 = df4.drop_duplicates()
+# df4 = df4.dropna()
+# df4 = df4.drop_duplicates()
 #cleaning spgscoretype dataset
 df5 = pd.read_sql(sql5, conn)
-df5 = df5.dropna()
-df5 = df5.drop_duplicates()
+# df5 = df5.dropna()
+# df5 = df5.drop_duplicates()
 #cleaning spgscoreweight dataset
 df6 = pd.read_sql(sql6, conn)
-df6 = df6.dropna()
-df6 = df6.drop_duplicates()
+# df6 = df6.dropna()
+# df6 = df6.drop_duplicates()
 #print(df6.head())
 #merging datasets 1 and 2
 df12 = pd.merge(df1,df2,how='left', on='SAMINDUSTRYID')
@@ -92,7 +92,11 @@ df1234 = pd.merge(df123,df4,how='left',on='ASSESSMENTTYPEID')
 df12345 = pd.merge(df1234,df5,how='left',on='SCORETYPEID')
 #df12345 = df12345[['SCORETYPEID','SCORETYPENAME','SAMINDUSTRYNAME','SAMINDUSTRYID','SCOREVALUE']]
 #merging datasets 1,2,3,4, and 5
-df = pd.merge(df12345,df6,how='left',on=['ASPECTID','SAMINDUSTRYID'])
+# df = pd.merge(df12345,df6,how='left',on=['ASPECTID','SAMINDUSTRYID'])
+# df = df[['ASPECTID','ASPECTNAME']]
+# df = df.loc[(df['ASPECTID']==107) | (df['ASPECTID']==108) | (df['ASPECTID']==114) | (df['ASPECTID']==124)]
+# df = df.sort_values(by='ASPECTID').drop_duplicates()
+# print(df)
 #df = df[['SAMINDUSTRYID','ASPECTID','SAMINDUSTRYNAME','SAMINDUSTRYID','FROMDATE','TODATE']]
 #print(df.head())
 #only filtering out REA Real Estate
