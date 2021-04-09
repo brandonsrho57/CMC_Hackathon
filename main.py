@@ -1,4 +1,6 @@
 import snowflake.connector as sf
+import pandas as pd
+import matplotlib.pyplot as plt
 from config import config
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -32,10 +34,17 @@ except Exception as e:
 
 try:
     sql = """
-        SELECT * FROM "MI_XPRESSCLOUD"."XPRESSFEED"."CIQEXCHANGERATE"
-        LIMIT 5;
-        """
+    SELECT * FROM "MI_XPRESSCLOUD"."XPRESSFEED"."CIQEXCHANGERATE";
+    """ 
+    #cursor = conn.cursor()
+    #cursor.execute(sql)
+    #df = pd.cursor.fetch_pandas_all()
     df = pd.read_sql(sql, conn)
-    print(df.head())
+    #print(df.head())
+    # for line in df:
+    #     print(line)
+    t = df.iloc[1:3]
+    plt.plot(t["PRICEDATE"],t["PRICECLOSE"])
+    plt.show()
 except Exception as e:
     print(e)
