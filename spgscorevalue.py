@@ -55,6 +55,10 @@ SELECT * FROM "MI_XPRESSCLOUD"."XPRESSFEED"."SPGSCORETYPE";
 sql6 = """
 SELECT * FROM "MI_XPRESSCLOUD"."XPRESSFEED"."SPGSCOREWEIGHT";
 """
+#data from CIQCOMPANYCROSSREF_SNL
+sql7 = """
+SELECT * FROM "MI_XPRESSCLOUD"."XPRESSFEED"."CIQCOMPANYCROSSREF_SNL";
+"""
 #cleaning spgscorevalue dataset
 df1 = pd.read_sql(sql1, conn)
 df1 = df1.dropna()
@@ -80,6 +84,12 @@ df6 = pd.read_sql(sql6, conn)
 df6 = df6.dropna()
 df6 = df6.drop_duplicates()
 #print(df6.head())
+#cleaning companycrossref_snl dataset
+df7 = pd.read_sql(sql7, conn)
+df7 = df7.rename(columns={'IDENTIFIERID':"INSTITUTIONID"})
+df7= df7.dropna()
+df7 = df7.drop_duplicates()
+print(df7.head())
 #merging datasets 1 and 2
 df12 = pd.merge(df1,df2,how='left', on='SAMINDUSTRYID')
 #print(df12)
@@ -92,8 +102,12 @@ df1234 = pd.merge(df123,df4,how='left',on='ASSESSMENTTYPEID')
 #merging datasets 1,2,3,4, and 5
 df12345 = pd.merge(df1234,df5,how='left',on='SCORETYPEID')
 #df12345 = df12345[['SCORETYPEID','SCORETYPENAME','SAMINDUSTRYNAME','SAMINDUSTRYID','SCOREVALUE']]
-#merging datasets 1,2,3,4, and 5
-df = pd.merge(df12345,df6,how='left',on=['ASPECTID','SAMINDUSTRYID'])
+#merging datasets 1,2,3,4,5, and 6
+df123456 = pd.merge(df12345,df6,how='left',on=['ASPECTID','SAMINDUSTRYID'])
+#merging datasets 1,2,3,4,5,6, and 7
+df1234567 = pd.merge(df123456,df7,how='left',on='INSTITUTIONID')
+df1234567 = df1234567[['INSTITUTIONID','SCORETYPENAME','SAMINDUSTRYNAME','SAMINDUSTRYID','SCOREVALUE']]
+print(df1234567.head())
 # df = df[['ASPECTID','ASPECTNAME']]
 # df = df.loc[(df['ASPECTID']==107) | (df['ASPECTID']==108) | (df['ASPECTID']==114) | (df['ASPECTID']==124)]
 # df = df.sort_values(by='ASPECTID').drop_duplicates()
@@ -140,6 +154,8 @@ for rect, label in zip(rects, labels):
             ha='center', va='bottom', fontsize=8)
 plt.show()
 
+#Summary Statistics for ESG SCORES
+print(dfesg['SCOREVALUE'].describe())
 #Observing the industries who had the highest mean esg score in 2020
 
 dfesg1 = df.loc[(df['ASPECTID']==107)&(df["ASSESSMENTYEAR"]==2020)]
