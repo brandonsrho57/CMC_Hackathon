@@ -2,6 +2,7 @@ import snowflake.connector as sf
 import pandas as pd
 import matplotlib.pyplot as plt
 from config import config
+import numpy as np
 
 # Connection String
 conn = sf.connect(
@@ -56,28 +57,28 @@ SELECT * FROM "MI_XPRESSCLOUD"."XPRESSFEED"."SPGSCOREWEIGHT";
 """
 #cleaning spgscorevalue dataset
 df1 = pd.read_sql(sql1, conn)
-# df1 = df1.dropna()
-# df1 = df1.drop_duplicates()
+df1 = df1.dropna()
+df1 = df1.drop_duplicates()
 #cleaning samindustry dataset
 df2 = pd.read_sql(sql2, conn)
-# df2 = df2.dropna()
-# df2 = df2.drop_duplicates()
+df2 = df2.dropna()
+df2 = df2.drop_duplicates()
 #cleaning spgaspect dataset
 df3 = pd.read_sql(sql3, conn)
-# df3 = df3.dropna()
-# df3 = df3.drop_duplicates()
+df3 = df3.dropna()
+df3 = df3.drop_duplicates()
 #cleaning spgassessmenttype dataset
 df4 = pd.read_sql(sql4, conn)
-# df4 = df4.dropna()
-# df4 = df4.drop_duplicates()
+df4 = df4.dropna()
+df4 = df4.drop_duplicates()
 #cleaning spgscoretype dataset
 df5 = pd.read_sql(sql5, conn)
-# df5 = df5.dropna()
-# df5 = df5.drop_duplicates()
+df5 = df5.dropna()
+df5 = df5.drop_duplicates()
 #cleaning spgscoreweight dataset
 df6 = pd.read_sql(sql6, conn)
-# df6 = df6.dropna()
-# df6 = df6.drop_duplicates()
+df6 = df6.dropna()
+df6 = df6.drop_duplicates()
 #print(df6.head())
 #merging datasets 1 and 2
 df12 = pd.merge(df1,df2,how='left', on='SAMINDUSTRYID')
@@ -97,13 +98,48 @@ df12345 = pd.merge(df1234,df5,how='left',on='SCORETYPEID')
 # df = df.loc[(df['ASPECTID']==107) | (df['ASPECTID']==108) | (df['ASPECTID']==114) | (df['ASPECTID']==124)]
 # df = df.sort_values(by='ASPECTID').drop_duplicates()
 # print(df)
-#df = df[['SAMINDUSTRYID','ASPECTID','SAMINDUSTRYNAME','SAMINDUSTRYID','FROMDATE','TODATE']]
-#print(df.head())
-#only filtering out REA Real Estate
+# df = df[['SAMINDUSTRYID','ASPECTID','SAMINDUSTRYNAME','SAMINDUSTRYID','FROMDATE','TODATE']]
+# print(df.head())
+# only filtering out REA Real Estate
 dfRE = df[df["SAMINDUSTRYNAME"]=='REA Real Estate']
 dfRE = dfRE[['SCOREID','INSTITUTIONID','ASPECTID','SAMINDUSTRYNAME','SCOREVALUE']]
 dfRE = dfRE.sort_values(by='SCOREVALUE', ascending=False).head(3)
 print(dfRE)
+#Question 1 Total Overview of ESG SCORES by making Histogram of all companies ESG Scores
+dfesg = df.loc[(df['ASPECTID']==107)&(df["ASSESSMENTYEAR"]==2020)]
+dfesg.dropna(subset=['ASPECTNAME'])
+dfesg.drop_duplicates()
+x = dfesg['SCOREVALUE']
+plt.style.use('ggplot')
+fig, ax=plt.subplots(1,1)
+n,bins,patches=ax.hist(x, bins =[0,10,20,30,40,50,60,70,80,90,100], color='orange')
+mean_esg=dfesg['SCOREVALUE'].mean()
+#print(mean_esg)
+ax.axvline(mean_esg,color='black',label='Mean ESG SCORE')
+ax.legend(loc=0)
+patches[0].set_fc("red")
+patches[1].set_fc("yellow")
+patches[2].set_fc("green")
+patches[3].set_fc("blue")
+patches[4].set_fc("aqua")
+patches[5].set_fc("indigo")
+patches[6].set_fc("lavendar")
+patches[7].set_fc("salmon")
+patches[8].set_fc("grey")
+plt.xticks(bins)
+plt.xlabel('ESG Scores', fontsize=15)
+plt.ylabel('Frequency', fontsize=15)
+plt.title('Overall ESG Scores 2020', fontsize=15)
+# plot values on top of bars
+rects = ax.patches
+labels = ["label%d" % i for i in range(len(rects))]
+  
+for rect, label in zip(rects, labels):
+    height = rect.get_height()
+    ax.text(rect.get_x() + rect.get_width() / 2, height+0.01, int(height),
+            ha='center', va='bottom', fontsize=8)
+plt.show()
+
 #filtering out Assessment Year = 2020 and grouping by industry and making it descending order
 yr_2020 = df.loc[df["ASSESSMENTYEAR"]==2020]
 yr_2020 = yr_2020.sort_values(by='SCOREVALUE', ascending=False).groupby(by='SAMINDUSTRYID').head(3)
