@@ -1,7 +1,5 @@
-username = 'INSERT USERNAME HERE'
-password = 'INSERT PW HERE'
+username = 'karan_goel'
+password = 'Bandit123'
 account = 'kia11090.us-east-1'
 warehouse = 'XF_HACKATHON_WH'
 database = 'MI_XPRESSCLOUD'
-
-#What's up
