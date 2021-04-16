@@ -240,6 +240,50 @@ for x,y in zip(dftimeesg['ASSESSMENTYEAR'],dftimeesg['SCOREVALUE']):
                  xytext=(0,12), # distance from text to points (x,y)
                  ha='center') # horizontal alignment can be left, right or center
 plt.show()
+#Time Series for Tobacco Industry Average ESG Mean Scores
+dftimeesgtob = df.loc[(df['ASPECTID']==107)&(df["SAMINDUSTRYNAME"]=='TOB Tobacco')]
+dftimeesgtob.dropna(subset=['ASPECTNAME'])
+dftimeesgtob.drop_duplicates()
+dftimeesgtob = dftimeesgtob.groupby('ASSESSMENTYEAR')['SCOREVALUE'].mean().reset_index()
+# print(dftimeesgtob)
+fig, ax = plt.subplots(1,1)
+plt.plot(dftimeesgtob['ASSESSMENTYEAR'], dftimeesgtob['SCOREVALUE'],'bo-')
+plt.ylim([20, 70])
+ax.set(xlabel="Assessment Year",
+       ylabel="Average ESG Score Value",
+       title="Tobacco Industry Average ESG Score Value for Each Assessment Year")
+for x,y in zip(dftimeesgtob['ASSESSMENTYEAR'],dftimeesgtob['SCOREVALUE']):
+
+    label = "{:.2f}".format(y)
+
+    plt.annotate(label, # this is the text
+                 (x,y), # this is the point to label
+                 textcoords="offset points", # how to position the text
+                 xytext=(0,12), # distance from text to points (x,y)
+                 ha='center') # horizontal alignment can be left, right or center
+plt.show()
+#Time Series for Restaurants & Leisure Facilities Industry Average ESG Mean Scores
+dftimeesgrest = df.loc[(df['ASPECTID']==107)&(df["SAMINDUSTRYNAME"]=='REX Restaurants & Leisure Facilities')]
+dftimeesgrest.dropna(subset=['ASPECTNAME'])
+dftimeesgrest.drop_duplicates()
+dftimeesgrest = dftimeesgrest.groupby('ASSESSMENTYEAR')['SCOREVALUE'].mean().reset_index()
+# print(dftimeesgrest)
+fig, ax = plt.subplots(1,1)
+plt.plot(dftimeesgrest['ASSESSMENTYEAR'], dftimeesgrest['SCOREVALUE'],'bo-')
+plt.ylim([0, 50])
+ax.set(xlabel="Assessment Year",
+       ylabel="Average ESG Score Value",
+       title="Restaurants & Leisure Facilities Industry Average ESG Score Value for Each Assessment Year")
+for x,y in zip(dftimeesgrest['ASSESSMENTYEAR'],dftimeesgrest['SCOREVALUE']):
+
+    label = "{:.2f}".format(y)
+
+    plt.annotate(label, # this is the text
+                 (x,y), # this is the point to label
+                 textcoords="offset points", # how to position the text
+                 xytext=(0,12), # distance from text to points (x,y)
+                 ha='center') # horizontal alignment can be left, right or center
+plt.show()
 #Counting the amount of companies for each year for Overall ESG Scores
 dftimeesgcount = df.loc[(df['ASPECTID']==107)]
 dftimeesgcount.dropna(subset=['ASPECTNAME'])
@@ -280,6 +324,14 @@ for rect, label in zip(rects, labels):
     ax.text(rect.get_x() + rect.get_width() / 2, height+0.01, int(height),
             ha='center', va='bottom', fontsize=8)
 plt.show()
+#Observing the industries who had the highest mean social score in 2020
+
+dfsoc1 = df.loc[(df['ASPECTID']==124)&(df["ASSESSMENTYEAR"]==2020)]
+dfsoc1.dropna(subset=['ASPECTNAME'])
+dfsoc1.drop_duplicates()
+dfsoc1 = dfsoc1.groupby('SAMINDUSTRYNAME')['SCOREVALUE'].mean()
+dfsoc1 = dfsoc1.sort_values(ascending=False)
+print(dfsoc1)
 #Summary Statistics for Social SCORES
 print(dfsoc['SCOREVALUE'].describe())
 #Time Series for Average Social Mean Scores
