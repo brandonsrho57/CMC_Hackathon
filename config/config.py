@@ -1,5 +1,5 @@
-username = 'karan_goel'
-password = 'Bandit123'
+username = 'username'
+password = 'password'
 account = 'kia11090.us-east-1'
 warehouse = 'XF_HACKATHON_WH'
 database = 'MI_XPRESSCLOUD'
