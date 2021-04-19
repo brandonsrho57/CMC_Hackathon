@@ -26,11 +26,11 @@ SELECT companyId, proId, personId FROM "MI_XPRESSCLOUD"."XPRESSFEED"."CIQPROFESS
 """
 
 sql2 = """
-SELECT proId, profunctionId FROM "MI_XPRESSCLOUD"."XPRESSFEED"."CIQPROTOPROFUNCTION";
+SELECT proId, proFunctionId FROM "MI_XPRESSCLOUD"."XPRESSFEED"."CIQPROTOPROFUNCTION";
 """
 
 sql3 = """
-SELECT profunctionId FROM "MI_XPRESSCLOUD"."XPRESSFEED"."CIQPROFUNCTION";
+SELECT proFunctionId, proFunctionName FROM "MI_XPRESSCLOUD"."XPRESSFEED"."CIQPROFUNCTION";
 """
 
 sql4 = """
@@ -55,10 +55,13 @@ df7 = pd.merge(df6, df4, how='left', on='PROID')
 df9 = pd.merge(df7, dfperson, how='left', on='PERSONID')
 df8 = df9[df9['COMPANYID'].isin(df500['COMPANYID'])]
 
-df8.dropna(subset=['COMPENSATIONVALUE'])
+df8 = df8.dropna()
+df8 = df8[df8.COMPENSATIONVALUE > 0.00]
+df8 = df8[df8.PREFIX.str.contains('Mr.') | df8.PREFIX.str.contains('Mrs.') | df8.PREFIX.str.contains('Ms.') | df8.PREFIX.str.contains('Miss')]
+df10 = df8[['PROFUNCTIONID', 'PROFUNCTIONNAME', 'PREFIX', 'COMPENSATIONVALUE']]
+df11 = df10.groupby(['PROFUNCTIONID', 'PROFUNCTIONNAME', 'PREFIX'])
+df12 = df11.mean()
 
-df8 = df8.groupby(["PROFUNCTIONID", "PREFIX"])["COMPENSATIONVALUE"].mean()
-print(df8)
 
 
 #idea of this is to compare males and females (using prefixes: Mr., Ms., and Mrs.,) at the same professional function
